@@ -2,6 +2,10 @@ package com.example.inocentemontemayorcrowdcontrol
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import com.example.inocentemontemayorcrowdcontrol.models.beans.Location
+import com.example.inocentemontemayorcrowdcontrol.models.firebase.FirebaseLocationDAO
+import com.example.inocentemontemayorcrowdcontrol.models.firebase.OnGetLocationsDone
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -12,50 +16,58 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnGetLocationsDone {
 
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val positions = listOf(
-            LatLng(-12.079264, -76.993111),
-            LatLng(-12.072536, -77.042850),
-            LatLng(-12.033720, -77.038948)
-        )
+        FirebaseLocationDAO().getLocations(this)
+    }
 
+    private fun getColor(location: Location): Float {
+        val ratio = location.currAttendance.toDouble() / location.maxCapacity.toDouble()
+
+        return when {
+            ratio < 0.33 -> {
+                BitmapDescriptorFactory.HUE_GREEN
+            }
+            ratio < 0.66 -> {
+                BitmapDescriptorFactory.HUE_YELLOW
+            }
+            else -> {
+                BitmapDescriptorFactory.HUE_RED
+            }
+        }
+    }
+
+    override fun onLocationsSuccess(locations: List<Location>) {
         val boundsBuilder = LatLngBounds.builder()
 
-        for (position in positions) {
+        for (location in locations) {
             mMap.addMarker(MarkerOptions()
                 .icon(BitmapDescriptorFactory
-                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .position(position)
-                .title("RAAA"))
+                    .defaultMarker(getColor(location)))
+                .position(location.coordinates)
+                .title(location.name))
 
-            boundsBuilder.include(position)
+            boundsBuilder.include(location.coordinates)
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 200))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(boundsBuilder.build().center, 13.5f))
+    }
+
+    override fun onError(msg: String) {
+        Log.i("firebase", msg)
     }
 }
