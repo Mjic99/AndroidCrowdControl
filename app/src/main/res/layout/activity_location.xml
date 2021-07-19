@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LocationActivity"
+    android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+        <TextView
+            android:id="@+id/location_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="Establecimiento"
+            android:textAppearance="@android:style/TextAppearance.WindowTitle"
+            android:visibility="visible" />
+    </androidx.appcompat.widget.Toolbar>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="20dp">
+        <TextView
+            android:id="@+id/curr_attendance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aforo actual"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        <TextView
+            android:id="@+id/curr_attendance_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cantidad"
+            android:layout_alignBaseline="@id/curr_attendance"
+            android:layout_alignParentRight="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        <TextView
+            android:id="@+id/max_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aforo máximo"
+            android:layout_below="@+id/curr_attendance"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        <TextView
+            android:id="@+id/max_capacity_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cantidad"
+            android:layout_alignBaseline="@id/max_capacity"
+            android:layout_alignParentRight="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+        <ImageView
+            android:id="@+id/location_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/max_capacity"
+            android:layout_above="@+id/open_route"/>
+        <Button
+            android:id="@+id/open_route"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Obtener ruta"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"/>
+    </RelativeLayout>
+
+</LinearLayout>

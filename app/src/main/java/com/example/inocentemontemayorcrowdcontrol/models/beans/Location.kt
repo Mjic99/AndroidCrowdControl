@@ -7,4 +7,5 @@ data class Location(
     val name: String,
     val coordinates: LatLng,
     val currAttendance: Int,
-    val maxCapacity: Int)
+    val maxCapacity: Int,
+    val imageUrl: String)

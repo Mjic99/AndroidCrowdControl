@@ -1,5 +1,6 @@
 package com.example.inocentemontemayorcrowdcontrol
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -33,6 +34,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnGetLocationsDone
         mMap = googleMap
 
         FirebaseLocationDAO().getLocations(this)
+
+        mMap.setOnInfoWindowClickListener { marker ->
+            val intent = Intent(this, LocationActivity::class.java)
+            intent.putExtra("id", marker.tag as String)
+            startActivity(intent)
+        }
     }
 
     private fun getColor(location: Location): Float {
@@ -55,11 +62,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnGetLocationsDone
         val boundsBuilder = LatLngBounds.builder()
 
         for (location in locations) {
-            mMap.addMarker(MarkerOptions()
+            val marker = mMap.addMarker(MarkerOptions()
                 .icon(BitmapDescriptorFactory
                     .defaultMarker(getColor(location)))
                 .position(location.coordinates)
                 .title(location.name))
+
+            marker.tag = location.id
 
             boundsBuilder.include(location.coordinates)
         }
