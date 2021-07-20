@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.GeoPoint
 
 
@@ -29,21 +30,32 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
     private var imagePicker : ImageView? = null
     private var imageURI : Uri? = null
     private var locationID : String? = null
+    private var updateOrCreate : Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_location_edit)
-        locationID = intent.getStringExtra("id")!!
-        FirebaseLocationDAO().getLocation(locationID!!, this)
+
+        updateOrCreate = intent.getBooleanExtra("update", false)
+        if (updateOrCreate!!) {
+            locationID = intent.getStringExtra("id")!!
+            FirebaseLocationDAO().getLocation(locationID!!, this)
+        } else {
+            val mapFragment = supportFragmentManager
+                .findFragmentById(R.id.minimap) as SupportMapFragment
+            mapFragment.getMapAsync(this)
+        }
+
+
 
         findViewById<Button>(R.id.sendButton).setOnClickListener {
             // para obtener en cualquier momento el lugar donde el usuario dejo el marcador solo usa marker.position
-            Toast.makeText(this, "${marker.position.longitude}, ${marker.position.latitude}", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, "${marker.position.longitude}, ${marker.position.latitude}", Toast.LENGTH_SHORT).show()
             FirebaseStorageDAO().uploadImage(imageURI!!, this)
         }
         imagePicker = findViewById(R.id.locationImage)
-        imagePicker!!.setOnClickListener {
+        findViewById<Button>(R.id.chooseImageButton).setOnClickListener {
             ImagePicker.with(this).galleryOnly().galleryMimeTypes(arrayOf("image/*")).crop().start()
         }
     }
@@ -87,12 +99,23 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
             findViewById<ScrollView>(R.id.scroll).requestDisallowInterceptTouchEvent(false)
         }
 
-        marker = googleMap.addMarker(
-            MarkerOptions()
-                .position(location.coordinates)
-                .draggable(true))
+        if (updateOrCreate!!) {
+            marker = googleMap.addMarker(
+                MarkerOptions()
+                    .position(location.coordinates)
+                    .draggable(true))
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location.coordinates, 12f))
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location.coordinates, 12f))
+        } else {
+            marker = googleMap.addMarker(
+                MarkerOptions()
+                    .position(LatLng(-12.124109061474547,-76.99732560664415))
+                    .draggable(true))
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(-12.124109061474547,-76.99732560664415), 12f))
+            Log.i("mapa", "si entra a la funcion")
+        }
+
     }
 
     override fun onMapClick(p0: LatLng?) {
@@ -100,13 +123,23 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
     }
 
     override fun onUploadImageSuccess(imageURL: String) {
-        FirebaseLocationDAO().updateLocation(
-            locationID!!,
-            GeoPoint(marker.position.latitude, marker.position.longitude),
-            findViewById<EditText>(R.id.LocationNameET).text.toString(),
-            findViewById<EditText>(R.id.MaxAttendanceET).text.toString().toInt(),
-            imageURL,this)
+        if (updateOrCreate!!) {
+            FirebaseLocationDAO().updateLocation(
+                locationID!!,
+                GeoPoint(marker.position.latitude, marker.position.longitude),
+                findViewById<EditText>(R.id.LocationNameET).text.toString(),
+                findViewById<EditText>(R.id.MaxAttendanceET).text.toString().toInt(),
+                imageURL,this)
+        } else {
+            FirebaseLocationDAO().createLocation(
+                GeoPoint(marker.position.latitude, marker.position.longitude),
+                findViewById<EditText>(R.id.LocationNameET).text.toString(),
+                findViewById<EditText>(R.id.MaxAttendanceET).text.toString().toInt(),
+                imageURL, FirebaseAuth.getInstance().currentUser!!.uid, this)
+        }
+
     }
+
 
     override fun onUploadImageError(msg: String) {
         Log.i("LocationEditActivity", "Error al subir imagen")

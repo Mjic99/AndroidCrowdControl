@@ -3,6 +3,7 @@ package com.example.inocentemontemayorcrowdcontrol
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inocentemontemayorcrowdcontrol.adapters.LocationsAdapter
 import com.example.inocentemontemayorcrowdcontrol.adapters.OnLocationItemClickListener
@@ -20,6 +21,11 @@ class MyLocationsActivity : AppCompatActivity(), OnGetLocationsDone, OnLocationI
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_locations)
         locationsView = findViewById(R.id.locations_list)
+        findViewById<Button>(R.id.addLocationButton).setOnClickListener{
+            val intent = Intent(this, LocationEditActivity::class.java)
+            intent.putExtra("update",  false)
+            startActivity(intent)
+        }
         FirebaseLocationDAO().getUserLocations(this)
     }
 
@@ -34,9 +40,11 @@ class MyLocationsActivity : AppCompatActivity(), OnGetLocationsDone, OnLocationI
         TODO("Not yet implemented")
     }
 
+
     override fun onClick(location: Location) {
         val intent = Intent(this, LocationEditActivity::class.java)
         intent.putExtra("id",  location.id)
+        intent.putExtra("update",  true)
         startActivity(intent)
     }
 

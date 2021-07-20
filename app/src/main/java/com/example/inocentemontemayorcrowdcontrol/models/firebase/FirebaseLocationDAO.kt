@@ -109,6 +109,17 @@ class FirebaseLocationDAO{
         }
     }
 
+    fun createLocation(geoPoint: GeoPoint, name : String, capacity: Int, imageURL : String, owner: String ,callback: OnUploadLocationDone){
+        db.collection("locations").document().set(
+            hashMapOf(
+                "coordinates" to geoPoint, "image_url" to imageURL, "max_capacity" to capacity, "name" to name, "curr_attendance" to 0, "owner" to owner)
+        ).addOnCompleteListener {
+            callback.onUploadSuccess()
+        }.addOnFailureListener { exception ->
+            Log.i("firebase", exception.message!!)
+        }
+    }
+
     fun setLocationAttendance(id: String, attendance: Int, callback : OnUpdateLocationAttendanceDone) {
         db.collection("locations")
             .document(id)

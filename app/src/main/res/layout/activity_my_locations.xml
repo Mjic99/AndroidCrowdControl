@@ -21,6 +21,14 @@
             android:text="Mis establecimientos"
             android:textAppearance="@android:style/TextAppearance.WindowTitle"
             android:visibility="visible" />
+        <Button
+            android:id="@+id/addLocationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="end"
+            android:text="+"
+            android:textSize="30dp"/>
     </androidx.appcompat.widget.Toolbar>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/locations_list"
@@ -28,4 +36,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/location_item"/>
+
 </LinearLayout>
