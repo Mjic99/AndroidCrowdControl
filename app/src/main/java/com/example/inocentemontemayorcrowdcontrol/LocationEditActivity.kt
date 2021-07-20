@@ -31,6 +31,7 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
     private var imageURI : Uri? = null
     private var locationID : String? = null
     private var updateOrCreate : Boolean? = null
+    private var isNewImage : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +49,6 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
         }
 
 
-
-        findViewById<Button>(R.id.sendButton).setOnClickListener {
-            // para obtener en cualquier momento el lugar donde el usuario dejo el marcador solo usa marker.position
-            // Toast.makeText(this, "${marker.position.longitude}, ${marker.position.latitude}", Toast.LENGTH_SHORT).show()
-            FirebaseStorageDAO().uploadImage(imageURI!!, this)
-        }
         imagePicker = findViewById(R.id.locationImage)
         findViewById<Button>(R.id.chooseImageButton).setOnClickListener {
             ImagePicker.with(this).galleryOnly().galleryMimeTypes(arrayOf("image/*")).crop().start()
@@ -66,6 +61,7 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
         if (resultCode== Activity.RESULT_OK && requestCode==ImagePicker.REQUEST_CODE) {
             imagePicker!!.setImageURI(data?.data)
             imageURI = data?.data
+            isNewImage = true
         }
     }
 
@@ -116,6 +112,21 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
             Log.i("mapa", "si entra a la funcion")
         }
 
+        findViewById<Button>(R.id.sendButton).setOnClickListener {
+            if (isNewImage && updateOrCreate!!) {
+                FirebaseStorageDAO().uploadImage(imageURI!!, this)
+            }
+            else if (isNewImage && !updateOrCreate!!){
+                handleUploadLocation(location.imageUrl)
+            }
+            else if (!isNewImage && updateOrCreate!!) {
+                handleUploadLocation(location.imageUrl)
+            }
+            else {
+                handleUploadLocation("https://firebase.google.com/images/brand-guidelines/logo-built_black.png")
+            }
+        }
+
     }
 
     override fun onMapClick(p0: LatLng?) {
@@ -123,6 +134,10 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
     }
 
     override fun onUploadImageSuccess(imageURL: String) {
+        handleUploadLocation(imageURL)
+    }
+
+    fun handleUploadLocation(imageURL: String) {
         if (updateOrCreate!!) {
             FirebaseLocationDAO().updateLocation(
                 locationID!!,
@@ -137,15 +152,14 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
                 findViewById<EditText>(R.id.MaxAttendanceET).text.toString().toInt(),
                 imageURL, FirebaseAuth.getInstance().currentUser!!.uid, this)
         }
-
     }
 
 
     override fun onUploadImageError(msg: String) {
-        Log.i("LocationEditActivity", "Error al subir imagen")
+        Toast.makeText(applicationContext,"Error al subir la imagen",Toast.LENGTH_SHORT).show()
     }
 
     override fun onUploadSuccess() {
-        Log.i("LocationEditActivity", "Establecimiento subido correctamente")
+        Toast.makeText(applicationContext,"Establecimiento Subido",Toast.LENGTH_SHORT).show()
     }
 }

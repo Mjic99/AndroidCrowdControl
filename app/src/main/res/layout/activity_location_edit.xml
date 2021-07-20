@@ -46,7 +46,7 @@
                 android:layout_alignBaseline="@id/locationName"
                 android:ems="11"
                 android:layout_alignParentRight="true"
-                android:hint="Editar Establecimiento"
+                android:hint="Establecimiento"
                 android:inputType="textPersonName" />
 
             <TextView
