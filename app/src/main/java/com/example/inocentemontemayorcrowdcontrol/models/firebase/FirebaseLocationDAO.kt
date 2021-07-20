@@ -5,6 +5,12 @@ import com.example.inocentemontemayorcrowdcontrol.models.beans.Location
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
+
+
+interface OnUploadLocationDone {
+    fun onUploadSuccess()
+}
 
 interface OnGetLocationsDone {
     fun onLocationsSuccess(locations : List<Location>)
@@ -19,7 +25,7 @@ interface OnUpdateLocationAttendanceDone {
     fun onLocationAttendanceUpdated(id: String, attendance: Int)
 }
 
-class FirebaseLocationDAO {
+class FirebaseLocationDAO{
 
     private val db = FirebaseFirestore.getInstance()
 
@@ -91,6 +97,18 @@ class FirebaseLocationDAO {
             }
     }
 
+
+    fun updateLocation(locationID : String,geoPoint: GeoPoint, name : String, capacity: Int, imageURL : String, callback: OnUploadLocationDone){
+        db.collection("locations").document(locationID).update(
+            mapOf(
+                "coordinates" to geoPoint, "image_url" to imageURL, "max_capacity" to capacity, "name" to name)
+        ).addOnCompleteListener {
+            callback.onUploadSuccess()
+        }.addOnFailureListener { exception ->
+            Log.i("firebase", exception.message!!)
+        }
+    }
+
     fun setLocationAttendance(id: String, attendance: Int, callback : OnUpdateLocationAttendanceDone) {
         db.collection("locations")
             .document(id)
@@ -99,4 +117,6 @@ class FirebaseLocationDAO {
                 callback.onLocationAttendanceUpdated(id, attendance)
             }
     }
+
+
 }

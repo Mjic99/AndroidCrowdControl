@@ -33,7 +33,7 @@
             android:paddingHorizontal="20dp">
 
             <TextView
-                android:id="@+id/curr_attendance"
+                android:id="@+id/locationName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Nombre:"
@@ -43,20 +43,38 @@
                 android:id="@+id/LocationNameET"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/curr_attendance"
+                android:layout_alignBaseline="@id/locationName"
                 android:ems="11"
                 android:layout_alignParentRight="true"
                 android:hint="Nombre de Establecimiento"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/maxAttendance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capacidad:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:layout_marginTop="40dp" />
+
+            <EditText
+                android:id="@+id/MaxAttendanceET"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/maxAttendance"
+                android:ems="11"
+                android:layout_alignParentRight="true"
+                android:hint="Aforo Máximo"
                 android:inputType="textPersonName" />
 
             <ImageView
                 android:id="@+id/locationImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="20dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/curr_attendance"
-                tools:srcCompat="@drawable/logo_built_black"/>
+                android:layout_marginVertical="20dp"
+                tools:srcCompat="@drawable/logo_built_black"
+                android:layout_below="@id/maxAttendance"/>
 
             <fragment
                 android:id="@+id/minimap"
