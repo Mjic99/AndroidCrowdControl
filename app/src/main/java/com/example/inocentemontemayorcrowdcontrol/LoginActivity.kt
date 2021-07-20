@@ -7,10 +7,13 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
+import com.example.inocentemontemayorcrowdcontrol.models.beans.User
+import com.example.inocentemontemayorcrowdcontrol.models.firebase.FirebaseUserDAO
+import com.example.inocentemontemayorcrowdcontrol.models.firebase.OnGetUserDataDone
 import com.google.firebase.auth.FirebaseAuth
 import org.w3c.dom.Text
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity(), OnGetUserDataDone {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance()
                     .signInWithEmailAndPassword(loginEmailET.text.toString(), loginPasswordET.text.toString()).addOnCompleteListener {
                         if (it.isSuccessful) {
-                            showClientActivity()
+                            FirebaseUserDAO().getUserData(this)
                         } else {
                             showAlert()
                         }
@@ -71,7 +74,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showCompanyActivity() {
-        // TODO: Agregar cambio a actividad de empresa
+        startActivity(Intent(this, MyLocationsActivity::class.java))
+    }
+
+    override fun onUserDataSuccess(user: User) {
+        if (user.type == "client") showClientActivity()
+        if (user.type == "company") showCompanyActivity()
     }
 
 }

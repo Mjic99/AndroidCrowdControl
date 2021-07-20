@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InocenteMontemayorCrowdControl">
+        <activity android:name=".MyLocationsActivity"></activity>
         <activity android:name=".RegisterActivity" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity android:name=".LocationActivity" />
         <activity
             android:name=".MapsActivity"
