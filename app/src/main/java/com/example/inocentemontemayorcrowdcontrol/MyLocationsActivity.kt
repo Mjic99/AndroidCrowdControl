@@ -49,11 +49,13 @@ class MyLocationsActivity : AppCompatActivity(), OnGetLocationsDone, OnLocationI
     }
 
     override fun onPlusClick(location: Location) {
-        FirebaseLocationDAO().setLocationAttendance(location.id, location.currAttendance + 10, this)
+        if (location.currAttendance < location.maxCapacity)
+            FirebaseLocationDAO().setLocationAttendance(location.id, location.currAttendance + 10, this)
     }
 
     override fun onMinusClick(location: Location) {
-        FirebaseLocationDAO().setLocationAttendance(location.id, location.currAttendance - 10, this)
+        if (location.currAttendance > 0)
+            FirebaseLocationDAO().setLocationAttendance(location.id, location.currAttendance - 10, this)
     }
 
     override fun onLocationAttendanceUpdated(id: String, attendance: Int) {
