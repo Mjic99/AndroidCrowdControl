@@ -7,21 +7,21 @@
     tools:context=".LocationActivity"
     android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
-        <TextView
-            android:id="@+id/location_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="Establecimiento"
-            android:textAppearance="@android:style/TextAppearance.WindowTitle"
-            android:visibility="visible" />
-    </androidx.appcompat.widget.Toolbar>
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary">
+    <TextView
+        android:id="@+id/location_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="Establecimiento"
+        android:textAppearance="@android:style/TextAppearance.WindowTitle"
+        android:visibility="visible" />
+</androidx.appcompat.widget.Toolbar>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
