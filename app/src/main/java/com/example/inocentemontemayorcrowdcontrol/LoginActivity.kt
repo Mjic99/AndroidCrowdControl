@@ -3,7 +3,9 @@ package com.example.inocentemontemayorcrowdcontrol
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
@@ -15,10 +17,12 @@ import org.w3c.dom.Text
 
 class LoginActivity : AppCompatActivity(), OnGetUserDataDone {
 
+    private lateinit var progressBar: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        progressBar = findViewById(R.id.progress_bar)
         // Setup
         setup()
     }
@@ -33,12 +37,14 @@ class LoginActivity : AppCompatActivity(), OnGetUserDataDone {
 
         loginButton!!.setOnClickListener {
             if (loginEmailET!!.text.isNotEmpty() && loginPasswordET!!.text.isNotEmpty()) {
+                progressBar.visibility = View.VISIBLE
                 FirebaseAuth.getInstance()
                     .signInWithEmailAndPassword(loginEmailET.text.toString(), loginPasswordET.text.toString()).addOnCompleteListener {
                         if (it.isSuccessful) {
                             FirebaseUserDAO().getUserData(this)
                         } else {
                             showAlert()
+                            progressBar.visibility = View.GONE
                         }
                     }
             }
@@ -80,6 +86,7 @@ class LoginActivity : AppCompatActivity(), OnGetUserDataDone {
     override fun onUserDataSuccess(user: User) {
         if (user.type == "client") showClientActivity()
         if (user.type == "company") showCompanyActivity()
+        progressBar.visibility = View.GONE
     }
 
 }

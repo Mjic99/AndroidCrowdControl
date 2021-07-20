@@ -48,7 +48,12 @@
                 android:background="@color/colorPrimaryDark"
                 android:textColor="@color/white"/>
         </RelativeLayout>
-
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"/>
         <TextView
             android:layout_marginVertical="7dp"
             android:id="@+id/registeredtv"
