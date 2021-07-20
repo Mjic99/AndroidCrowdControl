@@ -1,5 +1,6 @@
 package com.example.inocentemontemayorcrowdcontrol
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -33,7 +34,9 @@ class MyLocationsActivity : AppCompatActivity(), OnGetLocationsDone, OnLocationI
     }
 
     override fun onClick(location: Location) {
-        Toast.makeText(this, "padre", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, LocationEditActivity::class.java)
+        intent.putExtra("id",  location.id)
+        startActivity(intent)
     }
 
     override fun onPlusClick(location: Location) {
