@@ -6,6 +6,6 @@ data class Location(
     val id: String,
     val name: String,
     val coordinates: LatLng,
-    val currAttendance: Int,
+    var currAttendance: Int,
     val maxCapacity: Int,
     val imageUrl: String)

@@ -15,6 +15,10 @@ interface OnGetLocationDone {
     fun onLocationSuccess(location : Location)
 }
 
+interface OnUpdateLocationAttendanceDone {
+    fun onLocationAttendanceUpdated(id: String, attendance: Int)
+}
+
 class FirebaseLocationDAO {
 
     private val db = FirebaseFirestore.getInstance()
@@ -84,6 +88,15 @@ class FirebaseLocationDAO {
                 callback.onLocationsSuccess(locations)
             }.addOnFailureListener { exception ->
                 callback.onError(exception.message!!)
+            }
+    }
+
+    fun setLocationAttendance(id: String, attendance: Int, callback : OnUpdateLocationAttendanceDone) {
+        db.collection("locations")
+            .document(id)
+            .update("curr_attendance", attendance)
+            .addOnSuccessListener {
+                callback.onLocationAttendanceUpdated(id, attendance)
             }
     }
 }
