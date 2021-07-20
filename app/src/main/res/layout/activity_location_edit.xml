@@ -22,48 +22,59 @@
             android:textAppearance="@android:style/TextAppearance.WindowTitle"
             android:visibility="visible" />
     </androidx.appcompat.widget.Toolbar>
-    <RelativeLayout
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="20dp"
-        android:paddingHorizontal="20dp">
-
-        <TextView
-            android:id="@+id/curr_attendance"
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="20dp">
 
-        <EditText
-            android:id="@+id/LocationNameET"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/curr_attendance"
-            android:ems="11"
-            android:layout_alignParentRight="true"
-            android:hint="Nombre de Establecimiento"
-            android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/curr_attendance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
-        <ImageView
-            android:id="@+id/locationImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/max_capacity"
-            tools:srcCompat="@drawable/logo_built_black"/>
+            <EditText
+                android:id="@+id/LocationNameET"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/curr_attendance"
+                android:ems="11"
+                android:layout_alignParentRight="true"
+                android:hint="Nombre de Establecimiento"
+                android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="Enviar"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="20dp"/>
+            <ImageView
+                android:id="@+id/locationImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/curr_attendance"
+                tools:srcCompat="@drawable/logo_built_black"/>
 
-    </RelativeLayout>
+            <fragment
+                android:id="@+id/minimap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@id/locationImage"
+                tools:context=".LocationEditActivity" />
 
+            <Button
+                android:id="@+id/sendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Enviar"
+                android:layout_below="@id/minimap"
+                android:layout_marginTop="20dp"/>
 
+        </RelativeLayout>
+    </ScrollView>
 </LinearLayout>
