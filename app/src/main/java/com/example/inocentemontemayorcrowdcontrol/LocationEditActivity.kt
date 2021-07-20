@@ -117,7 +117,7 @@ class LocationEditActivity: AppCompatActivity(), OnGetLocationDone, OnMapReadyCa
                 FirebaseStorageDAO().uploadImage(imageURI!!, this)
             }
             else if (isNewImage && !updateOrCreate!!){
-                handleUploadLocation(location.imageUrl)
+                FirebaseStorageDAO().uploadImage(imageURI!!, this)
             }
             else if (!isNewImage && updateOrCreate!!) {
                 handleUploadLocation(location.imageUrl)
