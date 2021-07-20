@@ -27,6 +27,9 @@ class MyLocationsActivity : AppCompatActivity(), OnGetLocationsDone, OnLocationI
             startActivity(intent)
         }
         FirebaseLocationDAO().getUserLocations(this)
+        findViewById<Button>(R.id.reload).setOnClickListener {
+            FirebaseLocationDAO().getUserLocations(this)
+        }
     }
 
     override fun onLocationsSuccess(locations: List<Location>) {
